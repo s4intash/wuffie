@@ -32,6 +32,7 @@ let currentQuestion = 0;
 let score = 0;
 let selectedAnswer = null;
 let musicPlaying = false;
+let ytPlayer = null;
 
 // DOM Elements
 const welcomeScreen = document.getElementById('welcomeScreen');
@@ -44,7 +45,7 @@ const questionText = document.getElementById('questionText');
 const optionsContainer = document.getElementById('optionsContainer');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const musicToggle = document.getElementById('musicToggle');
-const bgMusic = document.getElementById('bgMusic');
+// YouTube player container is in HTML; player will be created via IFrame API
 
 // Event Listeners
 startBtn.addEventListener('click', startQuiz);
@@ -214,20 +215,24 @@ function restartQuiz() {
 
 // Music Functions
 function playMusic() {
-    if (!musicPlaying) {
-        bgMusic.play().catch(e => console.log('Music autoplay blocked'));
+    if (musicPlaying) return;
+    if (ytPlayer && ytPlayer.playVideo) {
+        ytPlayer.playVideo();
+        ytPlayer.mute();
         musicPlaying = true;
         musicToggle.textContent = 'Music On';
+        return;
     }
 }
 
 function toggleMusic() {
+    if (!ytPlayer) return;
     if (musicPlaying) {
-        bgMusic.pause();
+        ytPlayer.pauseVideo();
         musicPlaying = false;
         musicToggle.textContent = 'Music Off';
     } else {
-        bgMusic.play();
+        ytPlayer.playVideo();
         musicPlaying = true;
         musicToggle.textContent = 'Music On';
     }
@@ -258,6 +263,28 @@ function playCorrectSound() {
 
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    // No floating emoji elements added on load
-}); 
+// YouTube IFrame API will call this when ready
+window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('ytPlayer', {
+        height: '0',
+        width: '0',
+        videoId: 'PqWq6dORitQ', // extracted from URL
+        playerVars: {
+            autoplay: 0,
+            controls: 0,
+            disablekb: 1,
+            modestbranding: 1,
+            rel: 0,
+            fs: 0,
+            playsinline: 1,
+            loop: 1,
+            playlist: 'PqWq6dORitQ'
+        },
+        events: {
+            onReady: (event) => {
+                // Start paused; will play when user clicks Start or toggles music
+                event.target.mute();
+            }
+        }
+    });
+};
