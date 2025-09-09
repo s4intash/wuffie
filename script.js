@@ -60,8 +60,6 @@ function startQuiz() {
     score = 0;
     showQuestion();
     playMusic();
-    // Show floating bunnies once quiz begins
-    document.querySelectorAll('.floating-bunny').forEach(el => el.classList.remove('d-none'));
 }
 
 // Show Question
@@ -130,8 +128,6 @@ function nextQuestion() {
 function showResults() {
     quizScreen.classList.add('d-none');
     resultsScreen.classList.remove('d-none');
-    // Keep floating bunnies visible on results
-    document.querySelectorAll('.floating-bunny').forEach(el => el.classList.remove('d-none'));
     
     const percentage = Math.round((score / questions.length) * 100);
     let message = '';
