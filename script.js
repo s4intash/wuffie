@@ -32,7 +32,6 @@ let currentQuestion = 0;
 let score = 0;
 let selectedAnswer = null;
 let musicPlaying = false;
-let ytPlayer = null;
 let soundEnabled = false;
 
 // DOM Elements
@@ -46,7 +45,7 @@ const questionText = document.getElementById('questionText');
 const optionsContainer = document.getElementById('optionsContainer');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const musicToggle = document.getElementById('musicToggle');
-// YouTube player container is in HTML; player will be created via IFrame API
+const bgMusic = document.getElementById('bgMusic');
 
 // Event Listeners
 startBtn.addEventListener('click', startQuiz);
@@ -62,8 +61,6 @@ function startQuiz() {
     score = 0;
     showQuestion();
     playMusic();
-    // Attempt to enable sound on explicit user action
-    enableSound();
 }
 
 // Show Question
@@ -219,23 +216,37 @@ function restartQuiz() {
 // Music Functions
 function playMusic() {
     if (musicPlaying) return;
-    if (ytPlayer && ytPlayer.playVideo) {
-        ytPlayer.playVideo();
-        ytPlayer.mute();
+    if (!bgMusic) return;
+    const tryPlay = () => bgMusic.play().then(() => {
         musicPlaying = true;
         musicToggle.textContent = 'Music On';
-        return;
-    }
+        soundEnabled = true;
+    }).catch(() => {
+        // Autoplay blocked; wait for first gesture
+        const onFirstGesture = () => {
+            bgMusic.play().then(() => {
+                musicPlaying = true;
+                musicToggle.textContent = 'Music On';
+                soundEnabled = true;
+            }).catch(() => {});
+            document.removeEventListener('click', onFirstGesture);
+            document.removeEventListener('keydown', onFirstGesture);
+            document.removeEventListener('touchstart', onFirstGesture);
+        };
+        document.addEventListener('click', onFirstGesture);
+        document.addEventListener('keydown', onFirstGesture);
+        document.addEventListener('touchstart', onFirstGesture, { passive: true });
+    });
+    tryPlay();
 }
 
 function toggleMusic() {
-    if (!ytPlayer) return;
     if (musicPlaying) {
-        ytPlayer.pauseVideo();
+        bgMusic.pause();
         musicPlaying = false;
         musicToggle.textContent = 'Music Off';
     } else {
-        ytPlayer.playVideo();
+        bgMusic.play();
         musicPlaying = true;
         musicToggle.textContent = 'Music On';
     }
@@ -267,52 +278,7 @@ function playCorrectSound() {
 
 // Initialize
 // YouTube IFrame API will call this when ready
-window.onYouTubeIframeAPIReady = function() {
-    ytPlayer = new YT.Player('ytPlayer', {
-        height: '0',
-        width: '0',
-        videoId: 'PqWq6dORitQ', // extracted from URL
-        playerVars: {
-            autoplay: 1,
-            controls: 0,
-            disablekb: 1,
-            modestbranding: 1,
-            rel: 0,
-            fs: 0,
-            playsinline: 1,
-            loop: 1,
-            playlist: 'PqWq6dORitQ'
-        },
-        events: {
-            onReady: (event) => {
-                // Autoplay immediately (muted to satisfy autoplay policies)
-                event.target.mute();
-                event.target.playVideo();
-                musicPlaying = true;
-                musicToggle.textContent = 'Music On';
-                // Add one-time global click to enable sound as soon as the user interacts
-                const onFirstUserGesture = () => {
-                    enableSound();
-                    document.removeEventListener('click', onFirstUserGesture);
-                    document.removeEventListener('keydown', onFirstUserGesture);
-                    document.removeEventListener('touchstart', onFirstUserGesture);
-                };
-                document.addEventListener('click', onFirstUserGesture);
-                document.addEventListener('keydown', onFirstUserGesture);
-                document.addEventListener('touchstart', onFirstUserGesture, { passive: true });
-            }
-        }
-    });
-};
-
-function enableSound() {
-    if (!ytPlayer || soundEnabled !== false) return;
-    try {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(60);
-        ytPlayer.playVideo();
-        soundEnabled = true;
-    } catch (e) {
-        // ignore; will try again on next gesture
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    // Try to autoplay on load; fall back to first gesture if blocked
+    playMusic();
+});
