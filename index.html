@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bunny Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .lead { margin-bottom: 1.25rem; }
+    </style>
+    </head>
+    <body>
+        <div class="garden-bg">
+            <div class="music-control">
+                <button id="musicToggle" class="btn btn-sm btn-secondary">Music Off</button>
+                <audio id="bgMusic" loop></audio>
+            </div>
+
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="quiz-section">
+                <div class="welcome-content text-center">
+                    <div class="bunny-sticker running-bunny"></div>
+                    <img src="pics/jh.jpg" class="img-fluid rounded mb-4" alt="Cover image">
+                    <button id="startBtn" class="btn btn-primary btn-lg px-5 py-3">Start Quiz</button>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quizScreen" class="quiz-section d-none">
+                <div class="quiz-content">
+                    <div class="question-box">
+                        <div id="questionText"></div>
+                        <div id="optionsContainer" class="options-grid"></div>
+                        <div class="text-center mt-4">
+                            <button id="nextBtn" class="btn btn-success btn-lg px-4 py-2 d-none">Next Question</button>
+                        </div>
+                    </div>
+                    <div class="bunny-sticker hopping-bunny"></div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="quiz-section d-none">
+                <div class="results-content text-center">
+                    <div id="perfectMessage" class="d-none" style="margin: 0;"></div>
+                    <div class="bunny-sticker happy-bunny"></div>
+                    <img id="resultsImage" src="pics/ouch.jpg" class="img-fluid rounded mb-4 d-none" alt="Cover image">
+                    <div id="resultsMessage" class="mb-4 d-none" style="font-weight: 600;">ouch sakit naman.. ULITIN MO 'YAN!</div>
+                    <div id="scoreDisplay" class="score-box mb-4 d-none"></div>
+
+                    <!-- Modern Card Carousel for Perfect Score -->
+                    <div id="perfectScoreCarousel" class="modern-carousel d-none" style="margin-top: 1rem;">
+                        <div class="carousel-container">
+                            <div class="carousel-track">
+                                <div class="carousel-card active">
+                                    <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&h=300&fit=crop" alt="Photo 1">
+                                </div>
+                                <div class="carousel-card">
+                                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&h=300&fit=crop" alt="Photo 2">
+                                </div>
+                                <div class="carousel-card">
+                                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&h=300&fit=crop" alt="Photo 3">
+                                </div>
+                            </div>
+                            <button class="carousel-btn prev-btn" onclick="slideCarousel(-1)">‹</button>
+                            <button class="carousel-btn next-btn" onclick="slideCarousel(1)">›</button>
+                        </div>
+                        <div class="carousel-dots">
+                            <span class="dot active" onclick="currentSlide(1)"></span>
+                            <span class="dot" onclick="currentSlide(2)"></span>
+                            <span class="dot" onclick="currentSlide(3)"></span>
+                        </div>
+                    </div>
+
+                    <button id="restartBtn" class="btn btn-warning btn-lg px-5 py-3">Play Again</button>
+                </div>
+            </div>
+
+            <!-- Floating Bunnies -->
+            <div class="floating-bunny bunny-1"></div>
+            <div class="floating-bunny bunny-2"></div>
+            <div class="floating-bunny bunny-3"></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+    </html>
