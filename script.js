@@ -33,6 +33,7 @@ let score = 0;
 let selectedAnswer = null;
 let musicPlaying = false;
 let ytPlayer = null;
+let soundEnabled = false;
 
 // DOM Elements
 const welcomeScreen = document.getElementById('welcomeScreen');
@@ -61,6 +62,8 @@ function startQuiz() {
     score = 0;
     showQuestion();
     playMusic();
+    // Attempt to enable sound on explicit user action
+    enableSound();
 }
 
 // Show Question
@@ -270,7 +273,7 @@ window.onYouTubeIframeAPIReady = function() {
         width: '0',
         videoId: 'PqWq6dORitQ', // extracted from URL
         playerVars: {
-            autoplay: 0,
+            autoplay: 1,
             controls: 0,
             disablekb: 1,
             modestbranding: 1,
@@ -282,9 +285,34 @@ window.onYouTubeIframeAPIReady = function() {
         },
         events: {
             onReady: (event) => {
-                // Start paused; will play when user clicks Start or toggles music
+                // Autoplay immediately (muted to satisfy autoplay policies)
                 event.target.mute();
+                event.target.playVideo();
+                musicPlaying = true;
+                musicToggle.textContent = 'Music On';
+                // Add one-time global click to enable sound as soon as the user interacts
+                const onFirstUserGesture = () => {
+                    enableSound();
+                    document.removeEventListener('click', onFirstUserGesture);
+                    document.removeEventListener('keydown', onFirstUserGesture);
+                    document.removeEventListener('touchstart', onFirstUserGesture);
+                };
+                document.addEventListener('click', onFirstUserGesture);
+                document.addEventListener('keydown', onFirstUserGesture);
+                document.addEventListener('touchstart', onFirstUserGesture, { passive: true });
             }
         }
     });
 };
+
+function enableSound() {
+    if (!ytPlayer || soundEnabled !== false) return;
+    try {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(60);
+        ytPlayer.playVideo();
+        soundEnabled = true;
+    } catch (e) {
+        // ignore; will try again on next gesture
+    }
+}
