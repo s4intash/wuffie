@@ -1,29 +1,29 @@
 // Quiz Questions
 const questions = [
     {
-        question: "What do bunnies love to eat the most?",
-        options: ["Carrots", "Lettuce", "Apples", "Bananas"],
+        question: "What's my display name on ck?",
+        options: ["carson", "ash", "abo", "tomato"],
+        correct: 3
+    },
+    {
+        question: "What was my first impression of you?",
+        options: ["girl", "geng geng", "typical gen z on socmed, but cool", "weirdo"],
         correct: 0
     },
     {
-        question: "How many ears does a bunny have?",
-        options: ["1", "2", "3", "4"],
-        correct: 1
+        question: "What's my favorite emoji to send you?",
+        options: ["😔", "😭", "😝", "👺"],
+        correct: 3
     },
     {
-        question: "What color are most garden bunnies?",
-        options: ["Pink", "Blue", "Brown", "Green"],
+        question: "Who's my kabit?",
+        options: ["svt", "mrld", "keshi", "tj"],
+        correct: 0
+    },
+    {
+        question: "What's my comfort food (as of now)?",
+        options: ["ice cream", "carbonara", "jolly spaghetti", "frappe"],
         correct: 2
-    },
-    {
-        question: "What do bunnies do when they're happy?",
-        options: ["Binky (jump and twist)", "Sleep", "Eat", "Hide"],
-        correct: 0
-    },
-    {
-        question: "Where do bunnies like to live?",
-        options: ["In trees", "Underground burrows", "In water", "On mountains"],
-        correct: 1
     }
 ];
 
