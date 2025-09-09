@@ -1,27 +1,27 @@
 // Quiz Questions
 const questions = [
     {
-        question: "What's my display name on ck?",
+        question: "what's my display name on ck?",
         options: ["carson", "ash", "abo", "tomato"],
         correct: 3
     },
     {
-        question: "What was my first impression of you?",
-        options: ["girl", "geng geng", "typical gen z on socmed, but cool", "weirdo"],
-        correct: 0
+        question: "what was my first impression of you?",
+        options: ["flirty", "geng geng", "typical gen z on socmed, but cool", "weirdo"],
+        correct: 2
     },
     {
-        question: "What's my favorite emoji to send you?",
+        question: "what's my favorite emoji to send you?",
         options: ["😔", "😭", "😝", "👺"],
         correct: 3
     },
     {
-        question: "Who's my kabit?",
+        question: "who's my kabit?",
         options: ["svt", "mrld", "keshi", "tj"],
         correct: 0
     },
     {
-        question: "What's my comfort food (as of now)?",
+        question: "what's my comfort food (as of now)?",
         options: ["ice cream", "carbonara", "jolly spaghetti", "frappe"],
         correct: 2
     }
@@ -33,6 +33,7 @@ let score = 0;
 let selectedAnswer = null;
 let musicPlaying = false;
 let soundEnabled = false;
+let retryCount = 0;
 
 // DOM Elements
 const welcomeScreen = document.getElementById('welcomeScreen');
@@ -162,30 +163,8 @@ i love u with all my hypothalamus.`;
         restartBtnEl.classList.add('d-none');
         // Hide sticker on perfect to avoid extra space; card fits content
         if (resultsSticker) resultsSticker.classList.add('d-none');
-    } else if (percentage >= 80) {
-        message = '';
-        // Hide carousel; show welcome-style image and primary button
-        carousel.classList.add('d-none');
-        resultsImage.classList.remove('d-none');
-        if (resultsMessage) resultsMessage.classList.remove('d-none');
-        restartBtnEl.classList.remove('d-none');
-        restartBtnEl.classList.remove('btn-warning');
-        restartBtnEl.classList.add('btn-primary');
-        // Hide sticker to match welcome layout (image + button only)
-        if (resultsSticker) resultsSticker.classList.add('d-none');
-    } else if (percentage >= 60) {
-        message = '';
-        // Hide carousel; show welcome-style image and primary button
-        carousel.classList.add('d-none');
-        resultsImage.classList.remove('d-none');
-        if (resultsMessage) resultsMessage.classList.remove('d-none');
-        restartBtnEl.classList.remove('d-none');
-        restartBtnEl.classList.remove('btn-warning');
-        restartBtnEl.classList.add('btn-primary');
-        if (resultsSticker) resultsSticker.classList.add('d-none');
     } else {
-        message = '';
-        // Hide carousel; show welcome-style image and primary button
+        // Non-perfect scores: show different images and messages based on retry count
         carousel.classList.add('d-none');
         resultsImage.classList.remove('d-none');
         if (resultsMessage) resultsMessage.classList.remove('d-none');
@@ -193,6 +172,27 @@ i love u with all my hypothalamus.`;
         restartBtnEl.classList.remove('btn-warning');
         restartBtnEl.classList.add('btn-primary');
         if (resultsSticker) resultsSticker.classList.add('d-none');
+        
+        // Set different image and message based on retry count
+        if (retryCount === 1) {
+            resultsImage.src = 'pics/ouch2.jpg';
+            resultsMessage.textContent = 'nakakasakit kana baby, BAWI!';
+        } else if (retryCount === 2) {
+            resultsImage.src = 'pics/ouch3.jpg';
+            resultsMessage.textContent = 'KILALA MO PA BA AKO?AAAAA';
+        } else if (retryCount === 3) {
+            resultsImage.src = 'pics/ouch4.jpg';
+            resultsMessage.textContent = 'ETO NA SAGOT BWCT! tomato, typical gen z, 👺,svt, jolly spag!!!';
+        } else if (retryCount >= 4) {
+            // Final message - no play again button
+            resultsImage.classList.add('d-none');
+            resultsMessage.innerHTML = '<strong>DON\'T CONTACT THE DEVELOPER AGAIN!</strong>';
+            restartBtnEl.classList.add('d-none');
+        } else {
+            // First time (retryCount === 0)
+            resultsImage.src = 'pics/ouch.jpg';
+            resultsMessage.textContent = 'ouch sakit naman.. ULITIN MO \'YAN!';
+        }
     }
     
     // Only show text content when perfect score; otherwise hide text entirely
@@ -225,6 +225,7 @@ function restartQuiz() {
     currentQuestion = 0;
     score = 0;
     selectedAnswer = null;
+    retryCount++;
     showQuestion();
 }
 
