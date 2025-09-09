@@ -281,28 +281,84 @@ body {
     position: relative;
 }
 
-.carousel-container {
-    position: relative;
-    overflow: hidden;
+.hero-card {
+    width: 100%;
+    margin-bottom: 12px;
     border-radius: 20px;
+    overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+.hero-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-container {
+    position: relative;
+    overflow: visible;
+    border-radius: 20px;
+    box-shadow: none;
+    height: 320px;
+}
+
 .carousel-track {
-    display: flex;
-    transition: transform 0.5s ease;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .carousel-card {
-    min-width: 100%;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80%;
+    transform: translateX(-50%);
+    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
 .carousel-card img {
     width: 100%;
-    height: 300px;
+    height: 320px;
     object-fit: cover;
     border-radius: 20px;
+}
+
+/* Stacked positions */
+.carousel-card.pos-center {
+    transform: translateX(-50%) scale(1);
+    z-index: 3;
+    opacity: 1;
+    filter: none;
+}
+
+.carousel-card.pos-left {
+    transform: translateX(calc(-50% - 120px)) scale(0.92);
+    z-index: 2;
+    opacity: 0.9;
+    filter: brightness(0.95) saturate(0.95);
+}
+
+.carousel-card.pos-right {
+    transform: translateX(calc(-50% + 120px)) scale(0.92);
+    z-index: 2;
+    opacity: 0.9;
+    filter: brightness(0.95) saturate(0.95);
+}
+
+.carousel-card.pos-out {
+    transform: translateX(-50%) scale(0.85);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Controls on top of stacked deck */
+.modern-carousel .carousel-btn {
+    top: 50%;
 }
 
 .carousel-btn {
@@ -956,6 +1012,61 @@ body {
     box-shadow: none !important;
     transition: none !important;
     animation: none !important;
+}
+
+/* Perfect score area: ensure content fits snugly, no extra spaces */
+#perfectScoreCarousel {
+    margin-top: 8px !important;
+    padding: 0 !important;
+}
+
+/* If carousel has no children, don't reserve any space */
+#perfectScoreCarousel:empty {
+    display: none !important;
+}
+
+/* Consistent internal spacing for main cards */
+.welcome-content,
+.quiz-content,
+.results-content {
+    padding: 16px 16px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px !important;
+}
+
+/* Remove extra vertical margins from immediate children; rely on gap */
+.welcome-content > *,
+.quiz-content > *,
+.results-content > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Normalize common utility classes inside results to small, even spacing */
+.results-content .mb-4 { margin-bottom: 8px !important; }
+.results-content .mt-4 { margin-top: 8px !important; }
+
+#perfectScoreCarousel .carousel-container,
+#perfectScoreCarousel .carousel-track,
+#perfectScoreCarousel .carousel-card {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 16px;
+}
+
+#perfectScoreCarousel .carousel-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 16px;
+}
+
+#perfectScoreCarousel .carousel-dots,
+#perfectScoreCarousel .carousel-btn {
+    margin: 0 !important;
 }
 
 /* Ensure the 3rd choice behaves exactly like others (no flicker/blink) */
